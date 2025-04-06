@@ -6,7 +6,7 @@ metadata:
   name: mealie-deploy
   namespace: mealie
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: mealie-deploy
@@ -18,7 +18,14 @@ spec:
         app: mealie-deploy
     spec:
       containers:
-      - image: ghcr.io/mealie-recipes/mealie:v2.8.0
+      - image: ghcr.io/mealie-recipes/mealie:latest
         name: mealie
         ports:
           - containerPort: 9000
+        volumeMounts:
+          - mountPath: /app/data
+            name: mealie-data
+      volumes:
+        - name: mealie-data
+          persistentVolumeClaim:
+            claimName: mealie-data
